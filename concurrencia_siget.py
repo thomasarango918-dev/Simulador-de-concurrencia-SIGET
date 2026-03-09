@@ -27,11 +27,18 @@ class SensorTrafico(threading.Thread):
             mutex.acquire() # Bloquea el acceso al buffer
             
             buffer.append(dato)
-            print(f"✅ {self.nombre} almacenó: {dato}. Buffer: {len(buffer)}/{CAPACIDAD_BUFFER}")
+            print(f"{self.nombre} almacenó: {dato}. Buffer: {len(buffer)}/{CAPACIDAD_BUFFER}")
             
             mutex.release()
             full.release() # Avisa que hay un dato nuevo listo
             
+            #Prueba con buffer colapsado (cambair parametros en ModuloAnalisis (lento) y SensorTrafico(rapido))
+            #time.sleep(0.1)
+
+            #Prueba de vacio (cambair parametros en ModuloAnalisis (rapido) y SensorTrafico(lento))
+            #time.sleep(10)
+
+            #Funcionamiento correcto-----
             time.sleep(random.uniform(1, 3)) # Espera aleatoria para el siguiente dato
 
 class ModuloAnalisis(threading.Thread):
@@ -46,13 +53,21 @@ class ModuloAnalisis(threading.Thread):
             mutex.acquire()
             
             dato_procesado = buffer.pop(0)
-            print(f"⚙️  {self.nombre} PROCESANDO DATO: {dato_procesado}. Quedan: {len(buffer)}")
+            print(f" {self.nombre} PROCESANDO DATO: {dato_procesado}. Quedan: {len(buffer)}")
             
             mutex.release()
             empty.release() # Avisa que hay un espacio libre
             
+            #Prueba con buffer colapsado (cambair parametros en ModuloAnalisis (lento) y SensorTrafico(rapido))
+            #time.sleep(10)
+
+            #Prueba de vacio (cambair parametros en ModuloAnalisis (rapido) y SensorTrafico(lento))
+            #time.sleep(0.1)
+
+            #Funcionamiento correcto-----
             # Simula el tiempo de análisis del SIGET
             time.sleep(random.uniform(2, 4))
+
 
 # --- INICIO DE LA SIMULACIÓN ---
 if __name__ == "__main__":
